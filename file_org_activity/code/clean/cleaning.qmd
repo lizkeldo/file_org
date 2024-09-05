@@ -9,10 +9,35 @@ title: "Cleaning SFO weather data"
 - One data cleaning tasks:
     - There is a variable that has values that don't make sense in the data context. Figure out which variable this is and clean it up by making those values missing using `na_if()`.
 - Two data wrangling tasks:
+
+```{r}
+library(tidyverse)
+weather <- read_csv("../../data/raw/weather.csv")
+New_weather <- weather %>%
+    mutate(PrecipYr = na_if(PrecipYr,99999))
+```
+
     - Create a variable called `dateInYear` that indicates the day of the year (1-365) for each case. (Jan 1 should be 1, and Dec 31 should be 365).
+    
+```{r}
+New_weather <- New_weather %>%
+  mutate(dateInYear = yday(mdy(date)))
+```
+  
     - Create a variable called `month_name` that shows the 3-letter abbreviation for each case.
+
+```{r}
+New_weather <- New_weather %>% 
+  mutate(month_name = month.abb[Month])
+
+```
+
+
 - Save your wrangled data to the `data/clean/` folder using `write_csv()`. Name this file `weather_clean.csv`. Look up the documentation for this function by entering `?write_csv` in the Console. You'll need to write an appropriate relative path.
 
+```{r}
+write_csv(New_weather, file = "../../data/clean/New_weather.csv")
+```
 
 
 Notes that may help for the data wrangling:
